@@ -1,0 +1,57 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Natural Disaster | Crime Checker</title>
+        <link href="NDCstyle.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+    
+        <h1>How safe is your Vehicle?</h1>
+    
+        <p>Enter your ZIP Code to get Brakein rating for your area:</p>
+        
+        <input type="text" id="zipCode" placeholder="Enter ZIP code">
+        <button onclick="checkRisk()">Check</button>
+    
+        <div class="result" id="result"></div>
+        <!-- JavaScript section to fetch data from APIs -->
+    <script>
+        function checkRisk() {
+            const zipCode = document.getElementById('zipCode').value;
+
+            // Call to crime data API (example URL, replace with real API)
+            fetch(`https://api.crimeometer.com/v1/incidents/raw-data?zip=${zipCode}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'your-api-key-here'  // Replace with your real API key
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const crimeRate = data.incidents.length; // Example logic for processing crime data
+                document.getElementById('result').innerHTML += `<p><strong>Crime Rate:</strong> ${crimeRate}%</p>`;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = `<p>Error fetching crime data: ${error.message}</p>`;
+            });
+
+            // Call to natural disaster risk API (replace with actual FEMA or NOAA API)
+            fetch(`https://api.fema.gov/api-endpoint-for-natural-disasters/${zipCode}`)
+            .then(response => response.json())
+            .then(data => {
+                const disasterRisk = data.risk_level;  // Example logic
+                document.getElementById('result').innerHTML += `<p><strong>Natural Disaster Risk:</strong> ${disasterRisk}</p>`;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML += `<p>Error fetching disaster data: ${error.message}</p>`;
+            });
+        }
+    </script>
+    
+    
+    </body>
+    </html>
+    
